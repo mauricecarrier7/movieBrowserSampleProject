@@ -36,10 +36,6 @@ class RequestModel: NSObject {
         [:]
     }
     
-    var isLoggingEnabled: (Bool, Bool) {
-        (true, true)
-    }
-    
     func urlRequest() -> URLRequest {
         var components = URLComponents(string: path)!
         

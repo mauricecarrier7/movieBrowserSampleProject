@@ -47,20 +47,22 @@ class Network {
                 return completion(Result.failure(MovieBrowserError(ErrorType.failedRequest.rawValue)))
             }
             
-            switch T.self {
-                case is MovieSearchResponseModel.Type:
-                    guard let responseModel = try? decoder.decode(T.self, from: data) else {
-                        let error = MovieBrowserError(ErrorType.parsing.rawValue)
-                        
-                        completion(Result.failure(error))
-                        return
-                    }
-                    completion(Result.success(responseModel))
-                case is ImageResponseModel.Type:
-                    completion(Result.success(ImageResponseModel(data: data) as! T))
-                
-            default:
-                completion(Result.failure(MovieBrowserError.generalError()))
+            DispatchQueue.main.async {
+                switch T.self {
+                    case is MovieSearchResponseModel.Type:
+                        guard let responseModel = try? decoder.decode(T.self, from: data) else {
+                            let error = MovieBrowserError(ErrorType.parsing.rawValue)
+                            
+                            completion(Result.failure(error))
+                            return
+                        }
+                        completion(Result.success(responseModel))
+                    case is ImageResponseModel.Type:
+                        completion(Result.success(ImageResponseModel(data: data) as! T))
+                    
+                default:
+                    completion(Result.failure(MovieBrowserError.generalError()))
+                }
             }
         }.resume()
     }

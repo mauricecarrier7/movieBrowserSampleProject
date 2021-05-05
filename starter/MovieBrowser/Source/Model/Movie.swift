@@ -14,5 +14,5 @@ struct Movie: Codable {
     var releaseDate: String?
     var originalTitle: String?
     var backdropPath: String?
-    var popularity: Double?
+    var voteAverage: Double?
 }

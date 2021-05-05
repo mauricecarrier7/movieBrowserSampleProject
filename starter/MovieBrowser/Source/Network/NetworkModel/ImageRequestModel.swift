@@ -15,10 +15,6 @@ class ImageRequestModel: RequestModel  {
     init(query: String) {
         self.query = query
     }
-
-//    override var parameters: [String : String] {
-//        ["query": query, "api_key": Network.shared.apiKey]
-//    }
     
     override var path: String {
         "\(Strings.API.imageRequestPath)/\(query)"
@@ -27,11 +23,4 @@ class ImageRequestModel: RequestModel  {
     override var method: RequestType {
         RequestType.get
     }
-    
-//    override func urlRequest() -> URLRequest {
-//        var request: URLRequest = URLRequest(url: Network.shared.baseURL.appending(path).appending("/").appending(query))
-//        request.httpMethod = method.rawValue.uppercased()
-//        
-//        return request
-//    }
 }
