@@ -11,7 +11,7 @@ import Foundation
 enum ErrorType: String {
     case general = "Error_general"
     case parsing = "Error_parsing"
-    case failedReqeust = "Failed_request"
+    case failedRequest = "Failed_request"
 }
 
 

@@ -16,15 +16,15 @@ class MovieRequestModel: RequestModel {
         self.query = query
     }
     
+    override var parameters: [String : String] {
+        ["query": query, "api_key": Network.shared.apiKey]
+    }
+    
     override var path: String {
         Strings.API.movieRequestPath
     }
 
     override var method: RequestType {
         RequestType.get
-    }
-    
-    override var parameters: [String : String] {
-        ["query": query, "api_key": Network.shared.apiKey]
     }
 }

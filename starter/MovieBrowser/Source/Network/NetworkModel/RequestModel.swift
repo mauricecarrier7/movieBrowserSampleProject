@@ -19,11 +19,11 @@ class RequestModel: NSObject {
     var path: String {
         ""
     }
-    
-    var parameters: [String: String] {
+
+    var parameters: [String : String] {
         [:]
     }
-    
+
     var headers: [String: String] {
         [:]
     }
@@ -39,13 +39,8 @@ class RequestModel: NSObject {
     var isLoggingEnabled: (Bool, Bool) {
         (true, true)
     }
-}
-
-// MARK: - Public Functions
-extension RequestModel {
     
     func urlRequest() -> URLRequest {
-        let path: String = Network.shared.baseURL.appending(path)
         var components = URLComponents(string: path)!
         
         components.queryItems = parameters.map { (key, value) in

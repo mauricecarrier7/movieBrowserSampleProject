@@ -13,20 +13,42 @@ class NetworkTests: XCTestCase {
 
     func testMovieRequest() {
         let expectation = XCTestExpectation(description: "Fetch Star Wars")
+        let fetchQuery = "Star Wars"
         
-        Network.movies(query: "Star Wars") { result in
+        Network.movies(query: fetchQuery) { result in
             switch result {
             case let .success(model):
-                let nonMatchingResults = model.results.filter { movie in
-                    return movie.originalTitle?.contains("Star Wars") == false
-                }
                 
                 let matchingResults = model.results.filter { movie in
-                    return movie.originalTitle?.contains("Star Wars") == true
+                    return movie.originalTitle?.contains(fetchQuery) == true
                 }
                 
-                XCTAssertTrue(matchingResults.count > 0)
-                XCTAssertFalse(nonMatchingResults.count > 0)
+                let nonMatchingResults = model.results.filter { movie in
+                    return movie.originalTitle?.contains(fetchQuery) == false
+                }
+                
+                XCTAssertTrue(!matchingResults.isEmpty)
+                XCTAssertTrue(nonMatchingResults.isEmpty)
+                expectation.fulfill()
+                
+            case let .failure(error):
+                XCTFail(error.localizedDescription)
+                expectation.fulfill()
+            }
+        }
+        
+        wait(for: [expectation], timeout: 10.0)
+    }
+    
+    func testImageRequest() {
+        let expectation = XCTestExpectation(description: "Fetch Netflix logo")
+        let fetchQuery = "wwemzKWzjKYJFfCeiB57q3r4Bcm.png"
+        
+        Network.image(query: fetchQuery) { result in
+            switch result {
+            case let .success(model):
+                
+                XCTAssertNotNil(model.image())
                 expectation.fulfill()
                 
             case let .failure(error):

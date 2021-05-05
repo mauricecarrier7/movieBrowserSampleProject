@@ -12,9 +12,8 @@ struct Strings {
     
     struct API {
         static let apiKey = "5885c445eab51c7004916b9c0313e2d3"
-        static let baseURL = "https://api.themoviedb.org/3"
-        static let movieRequestPath = "/search/movie"
-        static let imageRequestPath = "/getting-started/images"
+        static let movieRequestPath = "https://api.themoviedb.org/3/search/movie"
+        static let imageRequestPath = "https://image.tmdb.org/t/p/w500"
     }
 }
 

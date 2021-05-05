@@ -12,10 +12,27 @@ class Network {
     
     static let shared = Network()
     let apiKey = Strings.API.apiKey
-    let baseURL = Strings.API.baseURL
     
+    /**
+     Search Movies
+     
+     - Parameter query: Text query to search
+     - Parameter completion: closure block, returns Swift Result
+     */
     class func movies(query: String, completion: @escaping(Swift.Result<MovieSearchResponseModel, MovieBrowserError>) -> Void) {
         Network.shared.sendRequest(request: MovieRequestModel(query: query)) { (result) in
+            completion(result)
+        }
+    }
+    
+    /**
+     Fetch Image
+     
+     - Parameter query: Text query to search
+     - Parameter completion: closure block, returns Swift Result
+     */
+    class func image(query: String, completion: @escaping(Swift.Result<ImageResponseModel, MovieBrowserError>) -> Void) {
+        Network.shared.sendRequest(request: ImageRequestModel(query: query)) { result in
             completion(result)
         }
     }
@@ -26,14 +43,25 @@ class Network {
             let decoder = JSONDecoder()
             decoder.keyDecodingStrategy = .convertFromSnakeCase
             
-            guard let data = data, let responseModel = try? decoder.decode(T.self, from: data) else {
-                let error = MovieBrowserError(ErrorType.parsing.rawValue)
-                
-                completion(Result.failure(error))
-                return
+            guard let data = data else {
+                return completion(Result.failure(MovieBrowserError(ErrorType.failedRequest.rawValue)))
             }
-
-            completion(Result.success(responseModel))
+            
+            switch T.self {
+                case is MovieSearchResponseModel.Type:
+                    guard let responseModel = try? decoder.decode(T.self, from: data) else {
+                        let error = MovieBrowserError(ErrorType.parsing.rawValue)
+                        
+                        completion(Result.failure(error))
+                        return
+                    }
+                    completion(Result.success(responseModel))
+                case is ImageResponseModel.Type:
+                    completion(Result.success(ImageResponseModel(data: data) as! T))
+                
+            default:
+                completion(Result.failure(MovieBrowserError.generalError()))
+            }
         }.resume()
     }
 }
