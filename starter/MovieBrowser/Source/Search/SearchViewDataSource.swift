@@ -52,6 +52,7 @@ extension SearchDataSource: UISearchBarDelegate {
     
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
         movies = []
+        searchBar.text = ""
         searchBar.resignFirstResponder()
     }
 }
